@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 # this is from PEP 263
 
-import sys
 import json
-import os
 import cpca
-import jieba
 import numpy
+import requests
+#import jieba
+#jieba is included in cpca
 #chinese_province_city_area_mapper https://github.com/DQinYuan/chinese_province_city_area_mapper
 #刘六,福州市南屿镇五峰里1号福州旗山森林国家旅游区
 #王一,上海市浦东新区锦13101111111绣路1001号世纪公园
@@ -59,12 +59,16 @@ def fourthAddress(rawaddress):
     return addr4
 
 def fivethAddress(rawaddress):
-    #路
+    #路 街
     addr5 = rawaddress.split('路', 1)
     if len(addr5) > 1:
         addr5[0] += "路"
     else:
-        addr5.insert(0, '')
+        addr5 = rawaddress.split('街', 1)
+        if len(addr5) > 1:
+            addr5[0] += "街"
+        else:
+            addr5.insert(0, '')
     return addr5
 
 def sixthAddress(rawaddress):
@@ -110,13 +114,22 @@ def diffMode2(rawaddress):
     return mixaddress
 
 def diffMode3(rawaddress):
-    address = [rawaddress]
-    address = cpca.transform(address, cut=False, umap={}, pos_sensitive=True)
-    address = numpy.array(address)
-    address = address[0]
-    address[0] = addressTransfr(address[0])
-    ans = [address[0], address[1], address[2], address[3]]
-    return ans
+    my_key = '4217b885adb16e0541338722c26beded'
+
+    parameters_1 = {'key': my_key, 'address': rawaddress}
+    url_1 = 'https://restapi.amap.com/v3/geocode/geo?parameters'
+    ret_1 = requests.get(url_1, parameters_1).json()
+
+    location = ret_1['geocodes'][0]['location']
+    parameters_2 = {'key': my_key, 'location': location}
+    url_2 = 'https://restapi.amap.com/v3/geocode/regeo?parameters'
+    ret_2 = requests.get(url_2, parameters_2).json()
+    mapaddress=ret_2['regeocode']['formatted_address']
+    addressthree=diffMode2(mapaddress)
+    rawaddress=rawaddress.split('号')
+    if len(rawaddress) >1:
+        addressthree[6]=rawaddress[1]
+    return addressthree
 
 def main(rawaddress):
     # rawInputFromConsole():
