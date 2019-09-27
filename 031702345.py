@@ -1,4 +1,4 @@
-####### -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # this is from PEP 263
 
 import sys
