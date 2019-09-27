@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 # this is from PEP 263
 
 import json
@@ -31,13 +31,13 @@ def threeAddress(rawaddress):
 
 def fourthAddress(rawaddress):
     #街道 镇 乡 地区 产业基地 开发区
-    addr4 = rawaddress.split('街道', 1)
+    addr4 = rawaddress.split('镇', 1)
     if len(addr4) > 1:
-        addr4[0] += "街道"
+        addr4[0] += "镇"
     else:
-        addr4 = rawaddress.split('镇', 1)
+        addr4 = rawaddress.split('街道', 1)
         if len(addr4) > 1:
-            addr4[0] += "镇"
+            addr4[0] += "街道"
         else:
             addr4 = rawaddress.split('乡', 1)
             if len(addr4) > 1:
