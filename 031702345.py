@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+####### -*- coding: utf-8 -*-
 # this is from PEP 263
 
 import sys
@@ -15,7 +15,7 @@ import numpy
 def printTojson1(name,tel,address):
     ans={}
     ans['姓名']=name
-    ans['手机']=tel
+    ans['电话']=tel
     ans['地址']=address
     jsonarray = json.dumps(ans, ensure_ascii=False)
     print(jsonarray)
