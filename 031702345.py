@@ -33,14 +33,11 @@ def threeAddress(rawaddress):
 
 def fourthAddress(rawaddress):
     #街道 镇 乡 地区 产业基地 开发区
-    town = open('town.txt', 'r', encoding='utf-8')
     findss=[]
-    towns=town.readlines()
     for line in towns:
         sss=line[:-1]
         if re.match(sss,rawaddress) != None:
             findss=re.split(sss,rawaddress,maxsplit=1)
-            town.close()
             findss[0]=sss
             return findss
     findss.append("")
@@ -205,6 +202,8 @@ def main(rawaddress):
         address = diffMode3(address)
     printTojson1(name,number,address)
 
+town = open('town.txt', 'r', encoding='utf-8')
+towns=town.readlines()
 while 1:
     try:
         inputraw=input();
@@ -215,3 +214,4 @@ while 1:
         break
 
     main(inputraw)
+town.close()
