@@ -190,6 +190,7 @@ def main(rawaddress):
 while 1:
     try:
         inputraw=input();
+        print(inputraw)
         if(inputraw=="END"):
             break
     except EOFError:
