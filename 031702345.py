@@ -18,8 +18,7 @@ def printTojson1(name,tel,address):
     ans['姓名']=name
     ans['手机']=tel
     ans['地址']=address
-    #jsonarray = json.dumps(ans, ensure_ascii=False)
-    jsonarray = json.dumps(ans, ensure_ascii)
+    jsonarray = json.dumps(ans, ensure_ascii=False)
     print(jsonarray)
     return
 
