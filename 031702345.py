@@ -6,6 +6,7 @@ import json
 import cpca
 import numpy
 import requests
+import re
 #import jieba
 #jieba is included in cpca
 #chinese_province_city_area_mapper https://github.com/DQinYuan/chinese_province_city_area_mapper
@@ -32,6 +33,21 @@ def threeAddress(rawaddress):
 
 def fourthAddress(rawaddress):
     #街道 镇 乡 地区 产业基地 开发区
+    town = open('town.txt', 'r', encoding='utf-8')
+    findss=[]
+    towns=town.readlines()
+    for line in towns:
+        sss=line[:-1]
+        if re.match(sss,rawaddress) != None:
+            findss=re.split(sss,rawaddress,maxsplit=1)
+            town.close()
+            findss[0]=sss
+            return findss
+    findss.append("")
+    findss.append(rawaddress)
+    town.close()
+    return findss
+'''''''''
     addr4 = rawaddress.split('镇', 1)
     if len(addr4) > 1:
         addr4[0] += "镇"
@@ -58,6 +74,7 @@ def fourthAddress(rawaddress):
                         else:
                             addr4.insert(0, '')
     return addr4
+'''''''''
 
 def fivethAddress(rawaddress):
     #路 街
@@ -187,6 +204,7 @@ def main(rawaddress):
     else:
         address = diffMode3(address)
     printTojson1(name,number,address)
+
 while 1:
     try:
         inputraw=input();
@@ -195,4 +213,5 @@ while 1:
             break
     except EOFError:
         break
+
     main(inputraw)
