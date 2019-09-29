@@ -22,28 +22,21 @@ def printTojson1(name,tel,address):
     return
 
 def threeAddress(rawaddress):
-    address = [rawaddress]
-    address = cpca.transform(address, umap={})
-    address = numpy.array(address)
-    address = address[0]
-    ans = [address[0],address[1],address[2],address[3]]
-    return ans
+    address = numpy.array(cpca.transform([rawaddress], umap={}))[0]
+    return [address[0],address[1],address[2],address[3]]
 
 def fourthAddress(rawaddress):
-    findss=[]
+    findss=['']
     for line in towns:
         sss=line[:-1]
         if re.match(sss,rawaddress) != None:
             findss=re.split(sss,rawaddress,maxsplit=1)
             findss[0]=sss
             return findss
-    findss.append("")
     findss.append(rawaddress)
-    town.close()
     return findss
 
-def fivethAddress(rawaddress):
-    #路 街
+def fivethAddress(rawaddress):#路 街
     addr5 = rawaddress.split('路', 1)
     if len(addr5) > 1:
         addr5[0] += "路"
@@ -56,12 +49,16 @@ def fivethAddress(rawaddress):
     return addr5
 
 def sixthAddress(rawaddress):
-    #号
+    #号 弄
     addr6 = rawaddress.split('号', 1)
     if len(addr6) > 1:
         addr6[0] += "号"
     else:
-        addr6.insert(0, '')
+        addr6 = rawaddress.split('弄', 1)
+        if len(addr6) > 1:
+            addr6[0] += "弄"
+        else:
+            addr6.insert(0, '')
     return addr6
 
 def addressTransfr(address0):
@@ -70,10 +67,7 @@ def addressTransfr(address0):
     else:
         return  address0
 def diffMode1(rawaddress):
-    address = [rawaddress]
-    address = cpca.transform(address, cut=False,umap={"徐州市":"徐州经济技术开发区"},pos_sensitive=True)
-    address = numpy.array(address)
-    address = address[0]
+    address = numpy.array(cpca.transform([rawaddress], cut=False,umap={"徐州市":"徐州经济技术开发区"},pos_sensitive=True))[0]
     if address[4] == -1:
         address[0] = ''
     if address[5] == -1:
@@ -82,8 +76,7 @@ def diffMode1(rawaddress):
         address[2] = ''
     address[0]=addressTransfr(address[0])
     addr4=fourthAddress(address[3])
-    ans = [address[0], address[1], address[2], addr4[0],addr4[1]]
-    return ans
+    return [address[0], address[1], address[2], addr4[0],addr4[1]]
 
 def diffMode2(rawaddress):
     mixaddress=diffMode1(rawaddress)
@@ -145,14 +138,11 @@ def main(rawaddress):# rawInputFromConsole():
             number = ""
             thislength = 0
         i = i + 1
-    if numberfind == True:
-        donothing = 1
-    else:
+    if numberfind == False:
         number = ""
     address = mixaddress[:thispos-(numberlength-1)]+mixaddress[thispos+1:]
     # remove . in the end
-    address = address.split(".")
-    address = address[0]
+    address = address.split(".")[0]
     if mode == 1 or mode == 0:
         address = diffMode1(address)
     elif mode == 2:
@@ -160,20 +150,23 @@ def main(rawaddress):# rawInputFromConsole():
     else:
         address = diffMode3(address)
     printTojson1(name,number,address)
-
-town = open('town.txt', 'r', encoding='utf-8')
-towns=town.readlines()
+try :
+    threeleveljson = open('threelevel.json', 'r', encoding='utf-8')
+    threeleveldict = json.load(threeleveljson)
+    threeleveljson.close()
+    town = open('town.txt', 'r', encoding='utf-8')
+    towns=town.readlines()
+    town.close()
+except Exception as e:
+    print("Cannot open threelevel.json or town.txt",e)
 while 1:
     try:
         inputraw=input();
-        #print(inputraw)
         if(inputraw=="END"):
             break
-    except EOFError:
-        break
-
+    except Exception as e:
+        print("Input ERROR")
     main(inputraw)
-town.close()
 
 '''''''''
     #街道 镇 乡 地区 产业基地 开发区
