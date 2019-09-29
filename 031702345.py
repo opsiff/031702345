@@ -36,30 +36,25 @@ def fourthAddress(rawaddress):
     findss.append(rawaddress)
     return findss
 
-def fivethAddress(rawaddress):#路 街
-    addr5 = rawaddress.split('路', 1)
-    if len(addr5) > 1:
-        addr5[0] += "路"
+def fivethAddress(rawaddress):
+    ans=['','']
+    addr = re.match(r".*(路|街|胡同|道|里|巷)", rawaddress)
+    if addr:
+        ans[0] = addr.group(0)
+        ans[1] = re.sub(r".*(路|街|胡同|道|里|巷)", '', rawaddress)
     else:
-        addr5 = rawaddress.split('街', 1)
-        if len(addr5) > 1:
-            addr5[0] += "街"
-        else:
-            addr5.insert(0, '')
-    return addr5
+        ans[1] = rawaddress
+    return ans
 
 def sixthAddress(rawaddress):
-    #号 弄
-    addr6 = rawaddress.split('号', 1)
-    if len(addr6) > 1:
-        addr6[0] += "号"
+    ans = ['', '']
+    addr = re.match(r".*(号|弄)", rawaddress)
+    if addr:
+        ans[0] = addr.group(0)
+        ans[1] = re.sub(r".*(号|弄)", '', rawaddress)
     else:
-        addr6 = rawaddress.split('弄', 1)
-        if len(addr6) > 1:
-            addr6[0] += "弄"
-        else:
-            addr6.insert(0, '')
-    return addr6
+        ans[1] = rawaddress
+    return ans
 
 def addressTransfr(address0):
     if(address0=='北京市' or address0=='上海市' or  address0=='天津市' or address0=='重庆市'):
@@ -105,14 +100,14 @@ def diffMode3(rawaddress):
 
 def main(rawaddress):# rawInputFromConsole():
     mode = 0# runmode: default is 1
-    modestring = rawaddress[:1]
-    if  modestring == "1":
+    modestring = rawaddress[:2]
+    if  modestring == "1!":
         mode=1
         rawaddress = rawaddress[2:]
-    elif modestring == "2":
+    elif modestring == "2!":
         mode=2
         rawaddress = rawaddress[2:]
-    elif modestring == "3":
+    elif modestring == "3!":
         mode=3
         rawaddress = rawaddress[2:]
     # split name from raw by ","
