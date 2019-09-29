@@ -11,6 +11,16 @@ import re
 #jieba is included in cpca
 #chinese_province_city_area_mapper https://github.com/DQinYuan/chinese_province_city_area_mapper
 
+try :
+    threeleveljson = open('threelevel.json', 'r', encoding='utf-8')
+    threeleveldict = json.load(threeleveljson)
+    threeleveljson.close()
+    town = open('town.txt', 'r', encoding='utf-8')
+    towns=town.readlines()
+    town.close()
+except Exception as e:
+    print("Cannot open threelevel.json or town.txt",e)
+
 # print to json
 def printTojson1(name,tel,address):
     ans={}
@@ -145,15 +155,7 @@ def main(rawaddress):# rawInputFromConsole():
     else:
         address = diffMode3(address)
     printTojson1(name,number,address)
-try :
-    threeleveljson = open('threelevel.json', 'r', encoding='utf-8')
-    threeleveldict = json.load(threeleveljson)
-    threeleveljson.close()
-    town = open('town.txt', 'r', encoding='utf-8')
-    towns=town.readlines()
-    town.close()
-except Exception as e:
-    print("Cannot open threelevel.json or town.txt",e)
+
 while 1:
     try:
         inputraw=input();
@@ -162,7 +164,6 @@ while 1:
     except Exception as e:
         print("Input ERROR")
     main(inputraw)
-
 '''''''''
     #街道 镇 乡 地区 产业基地 开发区
     addr4 = rawaddress.split('镇', 1)
