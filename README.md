@@ -15,3 +15,4 @@ pip3 install json
 pip3 install cpca
 pip3 install numpy
 pip3 install requests
+快速模式运行一般需要15分钟，请耐心等一等
