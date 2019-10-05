@@ -37,10 +37,10 @@ def threeAddress(rawaddress):
 
 def fourthAddress(rawaddress):
     ans = ['', '']
-    addr = re.match(r".*(街道|镇|乡|地区)", rawaddress)
+    addr = re.match(r".*(镇)", rawaddress)
     if addr:
         ans[0] = addr.group(0)
-        ans[1] = re.sub(r".*(街道|镇|乡|地区)", '', rawaddress)
+        ans[1] = re.sub(r".*(镇)", '', rawaddress)
     else:
         for line in towns:
             sss=line[:-1]
