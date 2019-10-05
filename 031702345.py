@@ -36,15 +36,20 @@ def threeAddress(rawaddress):
     return [address[0],address[1],address[2],address[3]]
 
 def fourthAddress(rawaddress):
-    findss=['']
-    for line in towns:
-        sss=line[:-1]
-        if re.match(sss,rawaddress) != None:
-            findss=re.split(sss,rawaddress,maxsplit=1)
-            findss[0]=sss
-            return findss
-    findss.append(rawaddress)
-    return findss
+    ans = ['', '']
+    addr = re.match(r".*(街道|镇|乡|地区|产业基地|开发区)", rawaddress)
+    if addr:
+        ans[0] = addr.group(0)
+        ans[1] = re.sub(r".*(街道|镇|乡|地区|产业基地|开发区)", '', rawaddress)
+    else:
+        for line in towns:
+            sss=line[:-1]
+            if re.match(sss,rawaddress) != None:
+                ans[1]=re.split(sss,rawaddress,maxsplit=1)
+                ans[0]=sss
+            else:
+                ans[1]=rawaddress
+    return ans
 
 def fivethAddress(rawaddress):
     ans=['','']
