@@ -59,10 +59,10 @@ def fivethAddress(rawaddress):
 
 def sixthAddress(rawaddress):
     ans = ['', '']
-    addr = re.match(r".*(号|弄)", rawaddress)
+    addr = re.match(r".\d+(号|弄)", rawaddress)
     if addr:
         ans[0] = addr.group(0)
-        ans[1] = re.sub(r".*(号|弄)", '', rawaddress)
+        ans[1] = rawaddress[addr.end():]
     else:
         ans[1] = rawaddress
     return ans
