@@ -72,20 +72,21 @@ def addressTransfr(address0):
         return  address0[:2]
     else:
         return  address0
-def diffMode1(rawaddress):
+def diffMode1(rawaddress,i=0):
     address = numpy.array(cpca.transform([rawaddress], cut=False,umap={"徐州市":"徐州经济技术开发区"},pos_sensitive=True))[0]
-    if address[4] == -1:
-        address[0] = ''
-    if address[5] == -1:
-        address[1] = ''
-    if address[6] == -1:
-        address[2] = ''
+    if(i==1):
+        if address[4] == -1:
+            address[0] = ''
+        if address[5] == -1:
+            address[1] = ''
+        if address[6] == -1:
+            address[2] = ''
     address[0]=addressTransfr(address[0])
     addr4=fourthAddress(address[3])
     return [address[0], address[1], address[2], addr4[0],addr4[1]]
 
-def diffMode2(rawaddress):
-    mixaddress=diffMode1(rawaddress)
+def diffMode2(rawaddress,i=0):
+    mixaddress=diffMode1(rawaddress,i)
     addr5=fivethAddress(mixaddress[4])
     mixaddress[4]=addr5[0]
     addr6=sixthAddress(addr5[1])
@@ -103,7 +104,7 @@ def diffMode3(rawaddress):
     url_2 = 'https://restapi.amap.com/v3/geocode/regeo?parameters'
     ret_2 = requests.get(url_2, parameters_2).json()
     mapaddress=ret_2['regeocode']['formatted_address']
-    addressthree=diffMode2(mapaddress)
+    addressthree=diffMode2(mapaddress,1)
     rawaddress=rawaddress.split('号')
     if len(rawaddress) >1:
         addressthree[6]=rawaddress[1]
